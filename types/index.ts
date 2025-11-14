@@ -6,13 +6,15 @@ export interface City {
   thumbnail: string // 이미지 URL
   badge?: 'popular' | 'rising' // 배지
 
-  // 평점
-  overallRating: number // 4.8
-  workRating: number // 4.9
-  costRating: number // 4.2
-  communityRating: number // 4.5
-  natureRating: number // 5.0
-  foodRating: number // 4.3
+  // 좋아요/싫어요
+  likeCount: number // 좋아요 수
+  dislikeCount: number // 싫어요 수
+
+  // 필터
+  budget: '100만원' | '100~200만원' | '200만원 이상' // 예산
+  regionCategory: '수도권' | '경상도' | '전라도' | '강원도' | '제주도' | '충청도' // 지역 카테고리
+  environment: string[] // ['자연친화', '도심선호', '카페작업', '코워킹 필수']
+  bestSeason: '봄' | '여름' | '가을' | '겨울' // 최고 계절
 
   // 비용
   monthlyCost: number // 1800000 (원)
@@ -91,4 +93,18 @@ export const weatherIcons: Record<City['currentWeather'], WeatherIcon> = {
   cloudy: '⛅',
   rainy: '🌧️',
   snowy: '❄️',
+}
+
+// 필터 타입 정의
+export type Budget = '100만원' | '100~200만원' | '200만원 이상'
+export type RegionCategory = '수도권' | '경상도' | '전라도' | '강원도' | '제주도' | '충청도'
+export type Environment = '자연친화' | '도심선호' | '카페작업' | '코워킹 필수'
+export type Season = '봄' | '여름' | '가을' | '겨울'
+
+// 필터 옵션 인터페이스
+export interface FilterOptions {
+  budget?: Budget
+  regionCategory?: RegionCategory
+  environment?: Environment[]
+  bestSeason?: Season
 }

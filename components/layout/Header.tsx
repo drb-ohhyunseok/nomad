@@ -1,7 +1,39 @@
-import { Search, Menu, User } from 'lucide-react'
+'use client'
+
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { Search, Menu, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { createClient } from '@/utils/supabase/client'
+import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 export default function Header() {
+  const router = useRouter()
+  const [user, setUser] = useState<SupabaseUser | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/')
+    router.refresh()
+  }
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -13,40 +45,6 @@ export default function Header() {
               한국노마드시티
             </span>
           </a>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-6 md:flex">
-            <a
-              href="/"
-              className="text-sm font-medium text-foreground transition-colors hover:text-brand-blue"
-            >
-              홈
-            </a>
-            <a
-              href="/cities"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-brand-blue"
-            >
-              도시찾기
-            </a>
-            <a
-              href="/community"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-brand-blue"
-            >
-              커뮤니티
-            </a>
-            <a
-              href="/meetups"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-brand-blue"
-            >
-              밋업
-            </a>
-            <a
-              href="/blog"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-brand-blue"
-            >
-              블로그
-            </a>
-          </nav>
         </div>
 
         {/* Right Actions */}
@@ -57,12 +55,30 @@ export default function Header() {
             <span className="sr-only">검색</span>
           </Button>
 
-          {/* Login/Signup (Phase 2) */}
+          {/* Login/Signup or User Menu */}
           <div className="hidden items-center gap-2 md:flex">
-            <Button variant="ghost" size="sm">
-              로그인
-            </Button>
-            <Button size="sm">회원가입</Button>
+            {user ? (
+              <>
+                <span className="text-sm text-gray-600">
+                  {user.user_metadata?.name || user.email}
+                </span>
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  로그아웃
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    로그인
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm">회원가입</Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu */}

@@ -6,7 +6,17 @@
       "Bash(npm install)",
       "Bash(npm install:*)",
       "Bash(npm run dev:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git worktree:*)",
+      "Bash(cat:*)",
+      "Bash(claude mcp add context7 -- npx -y @upstash/context7-mcp)",
+      "Bash(claude mcp:*)",
+      "WebSearch",
+      "WebFetch(domain:supabase.com)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

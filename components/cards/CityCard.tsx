@@ -1,10 +1,9 @@
 import Image from 'next/image'
-import { MapPin, Star, Users, Wifi, ThermometerSun, Heart } from 'lucide-react'
+import { MapPin, Users, Wifi, ThermometerSun, Heart } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { City, weatherIcons } from '@/types'
-import { cn } from '@/lib/utils'
 
 interface CityCardProps {
   city: City
@@ -46,13 +45,7 @@ export default function CityCard({ city }: CityCardProps) {
       <CardContent className="p-4">
         {/* City Name & Region */}
         <div className="mb-3">
-          <div className="mb-1 flex items-start justify-between">
-            <h3 className="text-lg font-bold text-foreground">{city.name}</h3>
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-semibold">{city.overallRating}</span>
-            </div>
-          </div>
+          <h3 className="text-lg font-bold text-foreground">{city.name}</h3>
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
             <MapPin className="h-3 w-3" />
             {city.region}
@@ -84,34 +77,6 @@ export default function CityCard({ city }: CityCardProps) {
             <span className="text-muted-foreground">
               {city.currentTemp}°C {weatherIcon}
             </span>
-          </div>
-        </div>
-
-        {/* Rating Bars */}
-        <div className="mb-3 space-y-1.5">
-          <div>
-            <div className="mb-0.5 flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">업무환경</span>
-              <span className="font-medium">{city.workRating}</span>
-            </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
-              <div
-                className="h-full bg-brand-blue"
-                style={{ width: `${(city.workRating / 5) * 100}%` }}
-              />
-            </div>
-          </div>
-          <div>
-            <div className="mb-0.5 flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">생활비</span>
-              <span className="font-medium">{city.costRating}</span>
-            </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
-              <div
-                className="h-full bg-green-500"
-                style={{ width: `${(city.costRating / 5) * 100}%` }}
-              />
-            </div>
           </div>
         </div>
 
